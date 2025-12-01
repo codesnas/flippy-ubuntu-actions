@@ -8,15 +8,16 @@
 #
 #======================================= Functions list =======================================
 #
-# error_msg         : Output error message
-# download_retry    : Download file with retry mechanism
-# init_var          : Initialize all variables
-# init_build_repo   : Initialize build ubuntu repository
-# query_kernel      : Query the latest kernel version
-# check_kernel      : Check kernel files integrity
-# download_kernel   : Download the kernel
-# make_ubuntu       : Loop to make Ubuntu images
-# out_github_env    : Output github.com variables
+# error_msg          : Output error message
+# download_retry     : Download file with retry mechanism
+# init_var           : Initialize all variables
+# init_build_repo    : Initialize build ubuntu repository
+# query_kernel       : Query the latest kernel version
+# check_kernel       : Check kernel files integrity
+# download_kernel    : Download the kernel
+# make_ubuntu_rootfs : Loop to make Ubuntu rootfs
+# make_ubuntu_image  : Loop to make Ubuntu images
+# out_github_env     : Output github.com variables
 #
 #=============================== Set make environment variables ===============================
 
@@ -381,8 +382,18 @@ download_kernel() {
     done
 }
 
-make_ubuntu() {
-    echo -e "${STEPS} Start building Ubuntu..."
+make_ubuntu_rootfs() {
+    echo -e "${STEPS} Start building Ubuntu rootfs..."
+    cd /opt/${SELECT_PACKITPATH}
+
+    # Make the Ubuntu rootfs
+    sudo rm -rf build/${ENV_LINUX_FLAVOR}
+    sudo ./${SCRIPT_MKROOTFS_FILE} ${ENV_LINUX_FLAVOR}
+    [[ "${?}" -eq "0" ]] && echo -e "${SUCCESS} Ubuntu rootfs building succeeded."
+}
+
+make_ubuntu_image() {
+    echo -e "${STEPS} Start building Ubuntu image..."
 
     i="1"
     for ENV_MACHINE in "${MAKE_UBUNTU_LIST[@]}"; do
@@ -438,13 +449,8 @@ make_ubuntu() {
                     [[ -z "${ENV_SOC}" ]] && error_msg "Failed to get the environment file for [ ${ENV_MACHINE} ]."
                     sed -i "s|^export kernel_version=.*|export kernel_version=${KERNEL_VERSION}|g" env/soc/${ENV_SOC}.env
 
-                    # Make the Ubuntu rootfs
-                    [[ -d "build/${ENV_LINUX_FLAVOR}" ]] || sudo ./${SCRIPT_MKROOTFS_FILE} ${ENV_LINUX_FLAVOR}
-                    # Make the Ubuntu image
-                    if [[ "${MAKE_TARGET}" == "img" ]]; then
-                        # sudo /mkimg.sh <soc> <machine> <linux-flavor> [custom]
-                        sudo ./${SCRIPT_MKIMG_FILE} ${ENV_SOC/.env/} ${ENV_MACHINE} ${ENV_LINUX_FLAVOR} ${ENV_CUSTOM_BOOT}
-                    fi
+                    # sudo /mkimg.sh <soc> <machine> <linux-flavor> [custom]
+                    sudo ./${SCRIPT_MKIMG_FILE} ${ENV_SOC/.env/} ${ENV_MACHINE} ${ENV_LINUX_FLAVOR} ${ENV_CUSTOM_BOOT}
 
                     # Generate compressed file
                     img_num="$(ls ${BUILD_TMP_DIR}/*.img 2>/dev/null | wc -l)"
@@ -452,11 +458,11 @@ make_ubuntu() {
                         echo -e "${STEPS} (${i}.${k}) Start making compressed files in the [ build ] directory."
                         cd ${BUILD_TMP_DIR}
                         case "${GZIP_IMGS}" in
-                            7z | .7z) ls *.img | xargs -I % sh -c 'sudo 7z a -t7z -r %.7z % && sudo rm -f %' ;;
-                            xz | .xz) sudo xz -z *.img ;;
-                            zip | .zip) ls *.img | xargs -I % sh -c 'sudo zip %.zip % && sudo rm -f %' ;;
-                            zst | .zst) sudo zstd --rm *.img ;;
-                            gz | .gz | *) sudo pigz -f *.img ;;
+                        7z | .7z) ls *.img | xargs -I % sh -c 'sudo 7z a -t7z -r %.7z % && sudo rm -f %' ;;
+                        xz | .xz) sudo xz -z *.img ;;
+                        zip | .zip) ls *.img | xargs -I % sh -c 'sudo zip %.zip % && sudo rm -f %' ;;
+                        zst | .zst) sudo zstd --rm *.img ;;
+                        gz | .gz | *) sudo pigz -f *.img ;;
                         esac
 
                         # Move the compressed package to the output directory
@@ -511,10 +517,15 @@ init_build_repo
 # Show server start information
 echo -e "${INFO} Server space usage before starting to build:\n$(df -hT /opt/${SELECT_PACKITPATH}) \n"
 
-# Packit Ubuntu
+# Query the latest kernel version if enabled
 [[ "${KERNEL_AUTO_LATEST,,}" =~ ^(true|yes)$ ]] && query_kernel
+# Download the kernel files
 download_kernel
-make_ubuntu
+# Make the Ubuntu rootfs
+make_ubuntu_rootfs
+# Make the Ubuntu image
+[[ "${MAKE_TARGET}" == "img" ]] && make_ubuntu_image
+# Output the github.com environment variables
 out_github_env
 
 # Show server end information
