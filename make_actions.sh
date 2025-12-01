@@ -69,6 +69,8 @@ MAKE_UBUNTU_LIST=($(echo "${CONFIG_MAP}" | tr -d ' ' | grep -E "^[^#].*:" | cut 
 MAKE_UBUNTU_RK3588=($(echo "${CONFIG_MAP}" | tr -d ' ' | grep -E "^[^#].*:rk3588$" | cut -d: -f1))
 # Set the list of devices using the [ rk35xx ] kernel
 MAKE_UBUNTU_RK35XX=($(echo "${CONFIG_MAP}" | tr -d ' ' | grep -E "^[^#].*:rk35xx$" | cut -d: -f1))
+# Set the list of devices using the [ mainline ] kernel
+MAKE_UBUNTU_MAINLINE=($(echo "${CONFIG_MAP}" | tr -d ' ' | grep -E "^[^#].*:mainline$" | cut -d: -f1))
 # All are packaged by default
 UBUNTU_SOC_VALUE="all"
 
@@ -199,9 +201,10 @@ init_var() {
 
     echo -e "${INFO} Make directory: [ /opt/${SELECT_PACKITPATH} ]"
     echo -e "${INFO} Make target: [ ${MAKE_TARGET} ]"
-    echo -e "${INFO} Make SoC: [ $(echo ${MAKE_UBUNTU_LIST[@]} | xargs) ]"
-    echo -e "${INFO} RK3588 devices: [ $(echo ${MAKE_UBUNTU_RK3588[@]} | xargs) ]"
-    echo -e "${INFO} RK35XX devices: [ $(echo ${MAKE_UBUNTU_RK35XX[@]} | xargs) ]"
+    echo -e "${INFO} Make devices: [ $(echo ${MAKE_UBUNTU_LIST[@]} | xargs) ]"
+    echo -e "${INFO} The RK3588 kernel devices: [ $(echo ${MAKE_UBUNTU_RK3588[@]} | xargs) ]"
+    echo -e "${INFO} The RK35XX kernel devices: [ $(echo ${MAKE_UBUNTU_RK35XX[@]} | xargs) ]"
+    echo -e "${INFO} The Mainline kernel devices: [ $(echo ${MAKE_UBUNTU_MAINLINE[@]} | xargs) ]"
     echo -e "${INFO} Linux flavor: [ ${ENV_LINUX_FLAVOR} ]"
     echo -e "${INFO} Custom boot mode: [ ${ENV_CUSTOM_BOOT} ]"
     echo -e "${INFO} Kernel tags: [ $(echo ${KERNEL_TAGS[@]} | xargs) ]"
