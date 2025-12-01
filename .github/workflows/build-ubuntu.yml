@@ -1,10 +1,10 @@
 #==========================================================================
-# Description: Ubuntu Image Builder
+# Description: Build Ubuntu image and rootfs
 # Copyright (C) 2025 https://github.com/unifreq/rk-ubuntu-build
 # Copyright (C) 2025 https://github.com/ophub/flippy-ubuntu-actions
 #==========================================================================
 
-name: Ubuntu Image Builder
+name: Build Ubuntu image and rootfs
 
 on:
   repository_dispatch:
