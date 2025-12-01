@@ -417,17 +417,19 @@ make_ubuntu() {
                     cd /opt/rk-ubuntu-build/upstream/kernel
 
                     # Copy the kernel to the building directory
-                    usage_kernel="$(echo "${CONFIG_MAP}" | tr -d ' ' | grep -E "^${ENV_MACHINE}:.*" | cut -d: -f3)"
-                    [[ -z "${usage_kernel}" ]] && error_msg "Failed to get the kernel directory for [ ${ENV_MACHINE} ]."
-                    echo -e "${INFO} Use kernel directory: [ ${usage_kernel} ] for [ ${ENV_MACHINE} ]"
-                    rm -f ${usage_kernel}/*
-                    cp -f backup/${vb}/${kernel_var}/* ${usage_kernel}/
+                    kernel_dir="$(echo "${CONFIG_MAP}" | tr -d ' ' | grep -E "^${ENV_MACHINE}:.*" | cut -d: -f3)"
+                    [[ -z "${kernel_dir}" ]] && error_msg "Failed to get the kernel directory for [ ${ENV_MACHINE} ]."
+                    echo -e "${INFO} Use kernel directory: [ ${kernel_dir} ] for [ ${ENV_MACHINE} ]"
+
+                    # Copy the kernel files to the kernel directory
+                    rm -f ${kernel_dir}/*
+                    cp -f backup/${vb}/${kernel_var}/* ${kernel_dir}/
+
                     # Get the kernel version from the boot file
-                    boot_kernel_file="$(basename $(ls ${usage_kernel}/boot-${kernel_var}* 2>/dev/null | head -n 1))"
+                    boot_kernel_file="$(basename $(ls ${kernel_dir}/boot-${kernel_var}* 2>/dev/null | head -n 1))"
                     KERNEL_VERSION="${boot_kernel_file:5:-7}"
                     [[ -z "${KERNEL_VERSION}" ]] && error_msg "Failed to get the kernel version for [ ${ENV_MACHINE} - ${vb} - ${kernel_var} ]."
                     echo -e "${STEPS} (${i}.${k}) Start building Ubuntu: [ ${ENV_MACHINE} ], Kernel directory: [ ${vb} ], Kernel version: [ ${KERNEL_VERSION} ]"
-                    echo -e "${INFO} Remaining space is ${now_remaining_space}G. \n"
 
                     cd /opt/${SELECT_PACKITPATH}
 
