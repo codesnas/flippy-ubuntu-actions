@@ -54,6 +54,9 @@ ht3                     :rk3528-k61        :rk35xx
 yixun-rs6pro            :rk3528-k61        :rk35xx
 tl3562-minievm          :rk3562-k61        :rk35xx
 netfusion               :rk3566-k61        :rk35xx
+xiaoyu-50ipc            :rv1126b-k61       :rk35xx
+xylink-xr3528           :rk3528-k61        :rk35xx
+#-----------------------+------------------+---------------------
 
 
 # Mainline kernel devices
