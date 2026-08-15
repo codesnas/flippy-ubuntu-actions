@@ -459,7 +459,7 @@ make_image() {
                     echo -e "${INFO} Updated kernel version in [ env/soc/${ENV_SOC}.env ] to [ ${KERNEL_VERSION} ]"
 
                     # sudo /mkimg.sh <soc> <machine> <linux-flavor> [custom]
-                    sudo ./${SCRIPT_MKIMG_FILE} ${ENV_SOC/.env/} ${machine_var} ${ENV_LINUX_FLAVOR} ${ENV_CUSTOM_BOOT}
+                    sudo env kernel_version="${KERNEL_VERSION}" ./${SCRIPT_MKIMG_FILE} ${ENV_SOC/.env/} ${machine_var} ${ENV_LINUX_FLAVOR} ${ENV_CUSTOM_BOOT}
 
                     # Compress the generated image files
                     img_num="$(ls ${BUILD_TMP_DIR}/*.img 2>/dev/null | wc -l)"
