@@ -81,7 +81,7 @@ BUILD_UBUNTU_MAINLINE=($(echo "${CONFIG_MAP}" | tr -d ' ' | grep -E "^[^#].*:mai
 KERNEL_REPO_URL_VALUE="breakingbadboy/OpenWrt"
 # Kernel tags: kernel_stable, kernel_rk3588, kernel_rk35xx
 KERNEL_TAGS=("stable" "rk3588" "rk35xx")
-STABLE_KERNEL=("6.12.y")
+STABLE_KERNEL=("6.18.y")
 RK3588_KERNEL=("6.1.y")
 RK35XX_KERNEL=("6.1.y")
 # Flippy kernel versions from the ophub repository (kernel_flippy, kernel_rk3588, kernel_rk35xx)

@@ -26,7 +26,7 @@ It is recommended to use an ARM64 architecture runner for building: `runs-on: ub
     ENV_MACHINE: e20c_h28k
     ENV_LINUX_FLAVOR: noble-xfce
     ENV_CUSTOM_BOOT: boot256-ext4root
-    KERNEL_VERSION_NAME: 6.1.y_6.12.y
+    KERNEL_VERSION_NAME: 6.12.y_6.18.y
 ```
 
 ## Optional Parameters
@@ -38,8 +38,8 @@ Based on the latest kernel build scripts released by `Flippy`, this Action provi
 | SCRIPT_REPO_URL        | unifreq/rk-ubuntu-build | Set the `<owner>/<repo>` of the build script source repository |
 | SCRIPT_REPO_BRANCH     | main                 | Set the branch of the build script source repository         |
 | KERNEL_REPO_URL        | breakingbadboy/OpenWrt | Set the `<owner>/<repo>` of the kernel download repository. By default, kernels are downloaded from the [kernel Releases](https://github.com/breakingbadboy/OpenWrt/releases/tag/kernel_stable) maintained by breakingbadboy. |
-| KERNEL_VERSION_NAME    | 6.12.y                 | Set the [mainline kernel version](https://github.com/breakingbadboy/OpenWrt/releases/tag/kernel_stable). Supports specifying a single kernel (e.g., `6.1.y`) or multiple kernels joined with `_` (e.g., `6.1.y_6.12.y`). |
-| KERNEL_AUTO_LATEST     | true                   | Set whether to automatically use the latest kernel version within the same series. When set to `true`, the Action will check the kernel repository for a newer version in the same series as specified in `KERNEL_VERSION_NAME` (e.g., `6.1.y`) and automatically use the latest one if available. When set to `false`, the specified version will be used as-is. |
+| KERNEL_VERSION_NAME    | 6.18.y                 | Set the [mainline kernel version](https://github.com/breakingbadboy/OpenWrt/releases/tag/kernel_stable). Supports specifying a single kernel (e.g., `6.18.y`) or multiple kernels joined with `_` (e.g., `6.12.y_6.18.y`). |
+| KERNEL_AUTO_LATEST     | true                   | Set whether to automatically use the latest kernel version within the same series. When set to `true`, the Action will check the kernel repository for a newer version in the same series as specified in `KERNEL_VERSION_NAME` (e.g., `6.18.y`) and automatically use the latest one if available. When set to `false`, the specified version will be used as-is. |
 | BUILD_TARGET           | image                  | Set the build target type: full image or rootfs file. Available values: `image` / `rootfs`. Default: `image`. |
 | ENV_MACHINE            | all                    | Set the target device SoC. Defaults to `all` (builds for all devices). Supports a single device (e.g., `e20c`) or multiple devices joined with `_` (e.g., `e20c_e54c`). For available values, see: [env/machine](https://github.com/unifreq/rk-ubuntu-build/tree/main/env/machine) |
 | ENV_LINUX_FLAVOR       | noble-rk-media         | Set the Linux distribution flavor for the image or rootfs. Default: `noble-rk-media`. For available values, see: [env/linux](https://github.com/unifreq/rk-ubuntu-build/tree/main/env/linux) |
