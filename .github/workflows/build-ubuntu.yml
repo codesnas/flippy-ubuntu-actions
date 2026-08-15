@@ -102,7 +102,7 @@ on:
       ubuntu_kernel:
         description: "Select mainline kernel"
         required: false
-        default: "6.12.y"
+        default: "6.18.y"
         type: choice
         options:
           - 6.1.y
