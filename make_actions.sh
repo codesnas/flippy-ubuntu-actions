@@ -77,8 +77,8 @@ BUILD_UBUNTU_RK35XX=($(echo "${CONFIG_MAP}" | tr -d ' ' | grep -E "^[^#].*:rk35x
 BUILD_UBUNTU_MAINLINE=($(echo "${CONFIG_MAP}" | tr -d ' ' | grep -E "^[^#].*:mainline$" | cut -d: -f1))
 
 # Default kernel download repository (tags: kernel_stable, kernel_rk3588, kernel_rk35xx)
-# https://github.com/breakingbadboy/OpenWrt/releases
-KERNEL_REPO_URL_VALUE="breakingbadboy/OpenWrt"
+# https://github.com/ophub/kernel
+KERNEL_REPO_URL_VALUE="ophub/kernel"
 # Kernel tags: kernel_stable, kernel_rk3588, kernel_rk35xx
 KERNEL_TAGS=("stable" "rk3588" "rk35xx")
 STABLE_KERNEL=("6.18.y")
