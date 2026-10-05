@@ -97,7 +97,6 @@ on:
         default: "ophub/kernel"
         type: choice
         options:
-          - breakingbadboy/OpenWrt
           - ophub/kernel
       ubuntu_kernel:
         description: "Select mainline kernel"
